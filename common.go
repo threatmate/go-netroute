@@ -95,6 +95,8 @@ type ipAddrs struct {
 	v4, v6 net.IP
 }
 
+type Route rtInfo
+
 func (r *router) Route(dst net.IP) (iface *net.Interface, gateway, preferredSrc net.IP, err error) {
 	return r.RouteWithSrc(nil, nil, dst)
 }
@@ -130,6 +132,17 @@ func (r *router) RouteWithSrc(input net.HardwareAddr, src, dst net.IP) (iface *n
 		}
 	}
 	return
+}
+
+func (r *router) Routes() (v4Routes []Route, v6Routes []Route) {
+	v4Routes = make([]Route, 0, len(r.v4))
+	for _, v4 := range r.v4 {
+		v4Routes = append(v4Routes, Route(*v4))
+	}
+	v6Routes = make([]Route, 0, len(r.v6))
+	for _, v6 := range r.v6 {
+		v6Routes = append(v6Routes, Route(*v6))
+	}
 }
 
 func (r *router) route(routes routeSlice, input net.HardwareAddr, src, dst net.IP) (iface int, gateway, preferredSrc net.IP, err error) {
