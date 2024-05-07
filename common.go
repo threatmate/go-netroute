@@ -143,6 +143,7 @@ func (r *router) Routes() (v4Routes []Route, v6Routes []Route) {
 	for _, v6 := range r.v6 {
 		v6Routes = append(v6Routes, Route(*v6))
 	}
+	return
 }
 
 func (r *router) route(routes routeSlice, input net.HardwareAddr, src, dst net.IP) (iface int, gateway, preferredSrc net.IP, err error) {
